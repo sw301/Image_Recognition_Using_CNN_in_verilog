@@ -1,118 +1,41 @@
-# Traffic FSM Controller
+# Image Recognition Model using Convolutional Neural Networks (CNN)
+## Project Overview
+This repository contains the implementation of an image recognition model using a Convolutional Neural Network (CNN). The primary goal of this project is to detect the number of times a specific test pattern appears in given input images of varying sizes.
+## Key Features
+Pattern Detection: Efficiently detects and counts occurrences of a pattern in input images
+Multi-Size Support: Implemented for both 128x128 and 256x256 image sizes
+Low Bit-Depth Handling: Optimized for 4-bit image representations
+CNN Architecture: Incorporates convolutional layers, max pooling, and thresholding for accurate detection
+Performance Optimizations:
+Pipelined convolution stages for faster processing
+Direct comparison for thresholding to avoid sorting overhead
+# Implementation Details
+## Methodology
+The system is implemented in multiple stages:
+Convolution with Laplacian Filter:
+Input image and test pattern are convolved with a Laplacian filter to extract feature maps
+Pipelined hardware implementation ensures efficient processing
+Image-Pattern Convolution:
+Feature maps of the input image and test pattern are further convolved
+Max Pooling Layer:
+Reduces the spatial dimensions of the output feature map by a factor of 2
+Thresholding and Counting:
+Detects the pattern by comparing the convolution result with a predefined threshold
+# Image Size and Thresholding Considerations
+*Image Sizes Supported:*
 
-## Overview
+128x128 pixels
 
-This project implements a finite state machine (FSM)-based traffic light controller module, designed to manage traffic flow between North/South (N_S) and East/West (E_W) directions based on detected vehicles. The FSM transitions between states depending on the presence of cars in the respective directions.
+256x256 pixels
 
-## Files Included
+Bit Depth: 4-bit image representation
 
-- *trafficFsmCon.v:* Implements the FSM traffic controller logic.
+*Threshold Variation:*
 
-- *tb_trafficFsmCon.v:* Testbench to validate the FSM functionality through simulation.
+The threshold value increases with image size
+For the same pattern, a 256x256 image requires a higher threshold compared to a 128x128 image
+This adjustment accounts for the increased complexity and potential match variations in larger images
+# Results
+-*Input and test patterns are stored in .data files (e.g., image.data and pattern.data)*
 
-## Parameters:
-*Module: trafficFsmCon*
-- *File:* trafficFsmCon.v
-
-- *Testbench:* tb_trafficFsmCon
-- *N_S :* Binary value representing the North/South state (2'b01).
-
-- *E_W :* Binary value representing the East/West state (2'b10).
-
-## Inputs:
-
-- *clk :* Clock signal.
-
-- *rst :* Reset signal (active high).
-
-- *cars :* Input signal indicating the presence of cars.
-
-## Outputs:
-
-- *green_N :* Controls the green light for the North/South direction.
-
-- *red_N :* Controls the red light for the North/South direction.
-
-- *green_E :* Controls the green light for the East/West direction.
-
-- *red_E :* Controls the red light for the East/West direction.
-
-## Functionality:
-
-The FSM starts in the North/South (N_S) state upon reset.
-
-If cars are detected (cars = 1), the FSM transitions to the other state (E_W or N_S) based on the current state.
-
-Traffic light outputs (green_* and red_*) are updated according to the current state and the cars signal.
-
-## Purpose:
-
-Simulates the trafficFsmCon module to validate its functionality under various conditions.<br>
-
-*Module: tb_trafficFsmCon*
-
-## Inputs:
-
-- *clk:* Simulated clock with a 10ns period.
-
-- *rst:* Simulated reset signal.
-
-- *cars:* Simulated car presence signal.
-
-## Outputs:
-
-green_N, red_N, green_E, red_E: Observed traffic light signals.
-
-## Test Scenarios:
-
-*Initial Reset:* FSM resets to the North/South (N_S) state.
-
-*No Cars Detected:* FSM remains in the current state.
-
-*Cars Detected:* FSM transitions between states based on the presence of cars.
-
-*Reset Behavior:* FSM resets and reinitializes to the North/South state.
-
-## Simulation Instructions
-
-## Prerequisites:
-
-Vivado 2018.2 or any compatible Verilog simulator.
-
-## Steps:
-
-- Open Vivado or your preferred simulator.
-
-- Compile the trafficFsmCon.v file.
-
-- Compile the tb_trafficFsmCon.v file.
-
-- Run the simulation.
-
-- Observe the output in the waveform viewer or console logs.
-
-## Expected Output:
-
-The FSM should start in the N_S state upon reset.
-
-The traffic light signals should transition based on the cars input.
-
-Reset should return the FSM to the initial N_S state.
-
-## Additional Information
-
-Parameters and Constants:
-
-Adjust *N_S* and *E_W* values as required to change state encoding.
-
-## Notes:
-
-- Ensure proper reset of signals before simulation.
-
-- Modify the cars signal in the testbench to simulate various scenarios effectively.
-
-
-
-## Author
-[swati](https://github.com/sw301)  
-(Trainee@Ramaiah Skill academy )
+-*Outputs include the count of detected patterns and visual highlights of detection locations*
